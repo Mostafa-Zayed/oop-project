@@ -26,8 +26,7 @@ class Route
             'method' => 'POST',
             'controller' => array_shift($parts),
             'action' => array_shift($parts),
-            'name' => ''
-            
+            'name' => '' 
         ];
         return $this;
     }
@@ -38,17 +37,15 @@ class Route
             if (empty($this->routes[$key]['name']))
                 $this->routes[$key]['name'] = $url;
         }
-
     }
+
     public function resource(string $model, string $controller)
     {
         foreach ($this->actions as $action) {
             if ($action == 'index' || $action == 'edit' || $action == 'create')
-                $this->get($model.'/'.$action,$controller.'@'.$action)->name($model.'.'.$action);
-                
+                $this->get($model.'/'.$action,$controller.'@'.$action)->name($model.'.'.$action);            
             else
                 $this->post($model.'/'.$action,$controller.'@'.$action)->name($model.'.'.$action);
-            
         }
         return $this;
     }
@@ -72,6 +69,16 @@ class Route
     public function getMethod(string $url)
     {
         return $this->getRoute($url) ? $this->routes[$url]['method'] : false;
+    }
+
+    public function getController(string $url)
+    {
+        return $this->getRoute($url) ? $this->routes[$url]['controller'] : false;
+    }
+
+    public function getAction(string $url)
+    {
+        return $this->getRoute($url) ? $this->routes[$url]['action'] : false;
     }
 }
 ?>

@@ -29,6 +29,11 @@ class Request
 
     public function server(string $key)
     {
-        return $_SERVER[$key];
+        return isset($_SERVER[$key]) ? $_SERVER[$key] : null;
+    }
+
+    public function serverAll()
+    {
+        return $_SERVER;
     }
 }
