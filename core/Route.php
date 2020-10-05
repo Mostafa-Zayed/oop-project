@@ -9,8 +9,8 @@ class Route
 
     public function get(string $url, string $controllerAction)
     {
-        $parts= explode('@', $controllerAction);
-        $this->routes[$url] = [
+        $parts= explode('@', trim($controllerAction));
+        $this->routes[trim($url)] = [
             'method' => 'GET',
             'controller' => array_shift($parts),
             'action' => array_shift($parts),
@@ -52,11 +52,26 @@ class Route
         }
         return $this;
     }
+
     public function except(string $url)
     {
         if (array_key_exists($url, $this->routes)) {
             unset($this->routes[$url]);
         }
+    }
+
+    public function isRoute(string $url): bool
+    {
+        return (array_key_exists($url, $this->routes));
+    }
+    public function getRoute(string $url)
+    {
+        return $this->isRoute($url) ? $this->routes[$url] : false;
+    }
+
+    public function getMethod(string $url)
+    {
+        return $this->getRoute($url) ? $this->routes[$url]['method'] : false;
     }
 }
 ?>

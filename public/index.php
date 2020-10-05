@@ -4,6 +4,6 @@ require_once '../vendor/autoload.php';
 require_once '../routes/web.php'; 
 use Core\Request;
 
-pre($route->routes);
+//echo gettype()
 
 ?>
