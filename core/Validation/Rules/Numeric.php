@@ -1,9 +1,6 @@
 <?php
 
-
 namespace Core\Validation\Rules;
-
-require_once 'ValidationInterface.php';
 
 class Numeric implements ValidationInterface
 {

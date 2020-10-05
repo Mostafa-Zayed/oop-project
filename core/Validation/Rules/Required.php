@@ -2,8 +2,6 @@
 
 namespace Core\Validation\Rules;
 
-require_once  'ValidationInterface.php';
-
 class Required implements ValidationInterface
 {
     private $inputName;

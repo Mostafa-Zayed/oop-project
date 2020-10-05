@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Core\Validation;
-
 
 use Core\Validation\Rules\ValidationInterface;
 

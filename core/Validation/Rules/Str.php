@@ -1,9 +1,7 @@
 <?php
 
-
 namespace Core\Validation\Rules;
 
-require_once 'ValidationInterface.php';
 class Str implements ValidationInterface
 {
     private $inputName, $inputValue, $messageError;

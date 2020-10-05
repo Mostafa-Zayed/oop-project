@@ -26,4 +26,9 @@ class Request
     {
         return $_POST[$key] = ($value) ? $value : isset($_POST[$key]) ? $_POST[$key] : $value;
     }
+
+    public function server(string $key)
+    {
+        return $_SERVER[$key];
+    }
 }
