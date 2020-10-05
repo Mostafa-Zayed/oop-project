@@ -6,7 +6,6 @@ class Route
 {
     public $routes = [];
     private $actions = ['index','create','store','edit','update','destroy'];
-    private $names = [];
 
     public function get(string $url, string $controllerAction)
     {
