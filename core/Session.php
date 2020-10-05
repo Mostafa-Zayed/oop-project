@@ -1,7 +1,18 @@
 <?php
 
+namespace Core;
+
 class Session
 {
+	/**
+	* invoke start function to check session
+	*
+	* @return mixed
+	*/
+	public function __construct()
+	{
+		$this->start();
+	}
 	/**
 	* check session id and start session
 	* 
