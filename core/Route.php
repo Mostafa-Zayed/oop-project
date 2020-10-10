@@ -6,11 +6,15 @@ class Route
 {
     public $routes = [];
     private $actions = ['index','create','store','edit','update','destroy'];
+    private $controller ;
+    private $action;
+    private $params;
 
     public function get(string $url, string $controllerAction)
     {
         $parts= explode('@', trim($controllerAction));
-        $this->routes[trim($url)] = [
+        $urlRegular = "/^". str_replace('/','\/',$url) . "$/";
+        $this->routes[trim($urlRegular)] = [
             'method' => 'GET',
             'controller' => array_shift($parts),
             'action' => array_shift($parts),
@@ -22,7 +26,9 @@ class Route
     public function post(string $url, string $controllerAction)
     {
         $parts= explode('@', $controllerAction);
-        $this->routes[$url] = [
+        $parts= explode('@', trim($controllerAction));
+        $urlRegular = "/^". str_replace('/','\/',$url) . "$/";
+        $this->routes[$urlRegular] = [
             'method' => 'POST',
             'controller' => array_shift($parts),
             'action' => array_shift($parts),
@@ -41,11 +47,19 @@ class Route
 
     public function resource(string $model, string $controller)
     {
+        $param = "([\d]+)";
         foreach ($this->actions as $action) {
-            if ($action == 'index' || $action == 'edit' || $action == 'create')
+            if ($action == 'index' || $action == 'edit' || $action == 'create') {
+                if ($action == 'edit')
+                $this->get($model.'/'.$action.'/'.$param,$controller.'@'.$action)->name($model.'.'.$action); 
+                else
                 $this->get($model.'/'.$action,$controller.'@'.$action)->name($model.'.'.$action);            
-            else
+            } else {
+                if ($action == 'update' || $action == 'destroy')
+                    $this->post($model.'/'.$action.'/'.$param,$controller.'@'.$action)->name($model.'.'.$action); 
+                else
                 $this->post($model.'/'.$action,$controller.'@'.$action)->name($model.'.'.$action);
+            }
         }
         return $this;
     }
@@ -57,28 +71,34 @@ class Route
         }
     }
 
-    public function isRoute(string $url): bool
+    public function isMatch(string $url, string $method): bool
     {
-        return (array_key_exists($url, $this->routes));
-    }
-    public function getRoute(string $url)
-    {
-        return $this->isRoute($url) ? $this->routes[$url] : false;
-    }
-
-    public function getMethod(string $url)
-    {
-        return $this->getRoute($url) ? $this->routes[$url]['method'] : false;
-    }
-
-    public function getController(string $url)
-    {
-        return $this->getRoute($url) ? $this->routes[$url]['controller'] : false;
+        foreach ($this->routes as $route =>$info) {
+            if (preg_match($route,$url,$matches)) {
+                if ($method == $info['method']) {
+                    $this->params = array_slice($matches,1);
+                    $this->controller = $info['controller'];
+                    $this->action = $info['action'];
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
-    public function getAction(string $url)
+    public function getController()
     {
-        return $this->getRoute($url) ? $this->routes[$url]['action'] : false;
+        return isset($this->controller) ? $this->controller : false ;
+    }
+
+    public function getAction()
+    {
+        return isset($this->action) ? $this->action : false ;
+    }
+
+    public function getParams()
+    {
+        return isset($this->params) ? $this->params : false ;
     }
 }
 ?>

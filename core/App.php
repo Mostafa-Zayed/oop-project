@@ -6,26 +6,23 @@ class App
 {
     private $controllerName;
     private $actionName;
-
+    private $params;
     public function __construct()
     {
         $this->prepareUrl();
         $this->renderUrl();
     }
 
-    private function prepareUrl(): void
+    private function prepareUrl()
     {
         global $route;
         $url = $this->checkUrl();
         $method = (new Request)->server('REQUEST_METHOD');
-        $routeUrl = $route->isRoute($url);
-        if (! $routeUrl) {
-            die('Page Not Found');
-        } elseif ($method !== $route->getMethod($url)) {
-            die('method is not exists');
-        } else {
-            $this->controllerName = $route->getController($url);
-            $this->actionName = $route->getAction($url);
+        $routeUrl = $route->isMatch($url,$method);
+        if ($routeUrl) {
+            $this->controllerName = $route->getcontroller();
+            $this->actionName = $route->getAction();
+            $this->params = $route->getParams();
         }
     }
 
@@ -35,8 +32,9 @@ class App
         if (class_exists($className)) {
             $object = new $className;
             if (method_exists($object,$this->actionName)) {
-                $action = $this->actionName;
-                $object->$action();
+                call_user_func_array([$className,$this->actionName],$this->params);
+                //$action = $this->actionName;
+                //$object->$action();
             }
         } else {
             die("This Controller NOt Found");
@@ -45,11 +43,6 @@ class App
 
     private function checkUrl()
     {
-        /*if (isset((new Request)->server('PATH_INFO'))) {
-
-        } else {
-            return ''
-        }*/
-        return (string) ltrim((new Request)->server('PATH_INFO'),'/');
+        return trim((new Request)->server('QUERY_STRING'));
     }
 }
