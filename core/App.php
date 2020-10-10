@@ -7,14 +7,15 @@ class App
     private $controllerName;
     private $actionName;
 
-    public function __construct(Route $route)
+    public function __construct()
     {
-        $this->prepareURl($route);
+        $this->prepareUrl();
         $this->renderUrl();
     }
 
-    private function prepareUrl(Route $route): void
+    private function prepareUrl(): void
     {
+        global $route;
         $url = $this->checkUrl();
         $method = (new Request)->server('REQUEST_METHOD');
         $routeUrl = $route->isRoute($url);

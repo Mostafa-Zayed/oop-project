@@ -8,7 +8,7 @@ class Numeric implements ValidationInterface
     /**
      * @inheritDoc
      */
-    public function __construct(string $inputName, $inputValue, string $messageError)
+    public function __construct(string $inputName, $inputValue, string $messageError = null)
     {
         $this->inputName = $inputName;
         $this->inputValue = $inputValue;
@@ -20,6 +20,6 @@ class Numeric implements ValidationInterface
      */
     public function validate()
     {
-        return ! is_numeric($this->inputValue) ? ($this->messageError) ? $this->messageError : ucfirst($this->inputName)." Must be ". ucfirst(__CLASS__) : '';
+        return ! is_numeric($this->inputValue) ? ($this->messageError) ? $this->messageError : $this->inputName." Must be number" : false;
     }
 }

@@ -23,7 +23,7 @@ class Database
 
     private function __clone()
     {
-        // TODO: Implement __clone() method.
+        
     } // end clone
 
     public static function getInstance()
@@ -44,7 +44,7 @@ class Database
     public function select(string $fields = '*'): Database
     {
         $this->fieldsName = $fields;
-        $this->query = "SELECT {$this->fieldsName} FROM `{$this->tableName}` ";
+        $this->query = "SELECT `{$this->fieldsName}` FROM `{$this->tableName}` ";
         return $this;
     } // end select
 
@@ -132,6 +132,7 @@ class Database
         $values = '';
         foreach ($data as $key => $value) {
             $columns .= "`$key`,";
+            $values  .= $this->connection->real_escape_string($value);
             $values .= "'$value',";
         }
         $columns = rtrim($columns, ',');
@@ -144,6 +145,7 @@ class Database
     {
         $queryParts = '';
         foreach ($data as $key => $value){
+            $value = $this->connection->real_escape_string($value);
             $queryParts .= "`".$key."` = '$value' ,";
         }
         $queryParts = rtrim($queryParts, ',');

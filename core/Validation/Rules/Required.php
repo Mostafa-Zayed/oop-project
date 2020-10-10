@@ -8,7 +8,7 @@ class Required implements ValidationInterface
     private $inputValue;
     private $messageError;
 
-    public function __construct(string $inputName, $inputValue, string $messageErrror)
+    public function __construct(string $inputName, $inputValue, string $messageErrror = null)
     {
         $this->inputName = $inputName;
         $this->inputValue = $inputValue;
@@ -17,12 +17,6 @@ class Required implements ValidationInterface
 
     public function validate()
     {
-//        if (strlen(trim($this->inputValue)) == 0 ) {
-//            if ($this->messageErrro)
-//                return $this->messageError;
-//            else
-//                return ucfirst($this->inputName)." Is ". ucfirst(__CLASS__);
-//        }
-        return strlen(trim($this->inputValue) == 0 ) ? ($this->messageError) ? $this->messageError : ucfirst($this->inputName)." Is ". ucfirst(__CLASS__) : ture ;
+        return strlen(trim($this->inputValue)) == 0 ? ($this->messageError) ? $this->messageError : $this->inputName." is required " : false ;
     }
 }

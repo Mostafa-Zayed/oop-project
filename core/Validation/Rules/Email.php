@@ -8,7 +8,7 @@ class Email implements ValidationInterface
     /**
      * @inheritDoc
      */
-    public function __construct(string $inputName, $inputValue, string $messageError)
+    public function __construct(string $inputName, $inputValue, string $messageError = null)
     {
         $this->inputName = $inputName;
         $this->inputValue = $inputValue;
@@ -20,6 +20,6 @@ class Email implements ValidationInterface
      */
     public function validate()
     {
-        return ! filter_var($this->inputValue, FILTER_VALIDATE_EMAIL) ? ($this->messageError) ? $this->messageError : ucfirst($this->inputName)." Must be Valid ".ucfirst(__CLASS__) : '';
+        return ! filter_var($this->inputValue, FILTER_VALIDATE_EMAIL) ? ($this->messageError) ? $this->messageError : $this->inputName." Must be Valid email" : false;
     }
 }

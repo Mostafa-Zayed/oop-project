@@ -11,10 +11,10 @@ class ValidationStrategy
     public function __construct(ValidationInterface $validatioObject)
     {
         $this->validationObject = $validatioObject;
-    }
+    } // end construct
 
     public function validate()
     {
-        $this->validationObject->validate();
-    }
+        return $this->validationObject->validate();
+    } // end validate
 }
